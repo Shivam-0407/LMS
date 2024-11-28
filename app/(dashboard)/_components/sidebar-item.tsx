@@ -41,6 +41,7 @@ export const SideBarItem = ({ label, icon: Icon, href }: SideBarItemProps) => {
         />
         {label}
       </div>
+      <div className={cn("ml-auto opacity-0 border-2 border-sky-700 h-full transition-all",isActive && 'opacity-100')}></div>
     </button>
   );
 };
