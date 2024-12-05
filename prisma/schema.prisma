@@ -14,20 +14,19 @@ datasource db {
   //relationMode = 'prisma'
 }
 
-
-model Course{
-  id String @id @default(uuid())
-  userId String
-  title String @db.Text
-  description String @db.Text
-  imageUrl String @db.Text
-  price Float?
-  isPublished Boolean @default(false)
+model Course {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String   @db.Text
+  description String?  @db.Text
+  imageUrl    String?  @db.Text
+  price       Float?
+  isPublished Boolean? @default(false)
 
   attachements Attachement[]
 
   categoryId String?
-  category Category? @relation(fields:[categoryId],references: [id])
+  category   Category? @relation(fields: [categoryId], references: [id])
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -35,20 +34,19 @@ model Course{
   @@index([categoryId])
 }
 
-model Category{
-  id String @id @default(uuid())
-  name String
+model Category {
+  id      String   @id @default(uuid())
+  name    String
   courses Course[]
 }
 
-model Attachement{
-  id String @id @default(uuid())
+model Attachement {
+  id   String @id @default(uuid())
   name String
-  url String @db.Text
+  url  String @db.Text
 
   courseId String
-  course Course @relation(fields: [courseId],references: [id],onDelete: Cascade)
-
+  course   Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
