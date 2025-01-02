@@ -50,7 +50,9 @@ export const CategoryForm = ({
       toast.error("Something went wrong !! ");
     }
   };
-  const selectedOption = options.find((option)=>option.value===initialData.categoryId)
+  const selectedOption = options.find(
+    (option) => option.value === initialData.categoryId
+  );
   return (
     <div className="mt-6 border bg-slate-100  rounded-md p-4">
       <div className="flex font-medium items-center justify-between">
@@ -89,7 +91,11 @@ export const CategoryForm = ({
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                  <Combobox options={...options} {...field}/>
+                    <Combobox
+                      options={options}
+                      value={field.value}
+                      onChange={(val) => field.onChange(val)}
+                    />
                   </FormControl>
                 </FormItem>
               )}

@@ -22,7 +22,7 @@ import {
 interface ComboboxProps {
   options: { label: string; value: string }[];
   value?: string;
-  onChange?: (value: string) => void; // keeping it optional for time being
+  onChange: (value: string) => void; // keeping it optional for time being
 }
 
 export const Combobox = ({ options, value, onChange }: ComboboxProps) => {
