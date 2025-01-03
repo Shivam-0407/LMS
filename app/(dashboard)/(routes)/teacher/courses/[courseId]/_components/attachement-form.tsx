@@ -6,19 +6,14 @@ import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import {
   File,
-  ImageIcon,
-  Loader,
   Loader2,
-  Pencil,
   PlusCircleIcon,
   X,
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { Attachement, Course } from "@prisma/client";
-import Image from "next/image";
 import { FileUpload } from "@/app/(dashboard)/_components/file-upload";
 
 interface AttachemntFormProps {
@@ -52,9 +47,8 @@ export const AttachemntForm = ({
 
   const onDelete = async (id: string) => {
     try {
-
       setDeletingId(id);
-      console.log("attachement id ",id)
+      console.log("attachement id ", id);
       await axios.delete(`/api/courses/${courseId}/attachements/${id}`);
       toast.success("Attachement Deleted");
       router.refresh();
@@ -95,7 +89,11 @@ export const AttachemntForm = ({
                 >
                   <div className="flex items-center">
                     <File className="h-4 w-4 mr-2 flex-shrink-0 " />
-                    <p>{attachement.name.length>30?`${attachement.name.slice(0,29)}...`:attachement.name}</p>
+                    <p>
+                      {attachement.name.length > 30
+                        ? `${attachement.name.slice(0, 29)}...`
+                        : attachement.name}
+                    </p>
                   </div>
                   {deletingId === attachement.id && (
                     <div className="">
