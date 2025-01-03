@@ -3,7 +3,6 @@ import { z } from "zod";
 import axios from "axios";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl, Form, FormField, FormItem } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
 import { Pencil, PlusCircle } from "lucide-react";
@@ -11,12 +10,12 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { Textarea } from "@/components/ui/textarea";
-import { Course } from "@prisma/client";
+import { Input } from "@/components/ui/input";
+import { Chapter, Course } from "@prisma/client";
 import { title } from "process";
 
 interface ChaptersFormProps {
-  initialData: Course;
+  initialData: Course & { chapters: Chapter[] };
   courseId: string;
 }
 
@@ -27,7 +26,7 @@ const formSchema = z.object({
 export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   const [isCreating, setIsCreating] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-  const toggleCreating = () => setIsUpdating((current) => !current);
+  const toggleCreating = () => setIsCreating((current) => !current);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,16 +61,7 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
           )}
         </Button>
       </div>
-      {!isCreating && (
-        <p
-          className={cn(
-            "text-sm mt-2",
-            !initialData.description && "text-slate-500 italic"
-          )}
-        >
-          {initialData.description || "No description"}
-        </p>
-      )}
+
       {isCreating && (
         <Form {...form}>
           <form
@@ -85,22 +75,36 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
-                    <Textarea
+                    <Input
                       disabled={isSubmitting}
-                      placeholder="eg. This course is about ..."
+                      placeholder="eg. Introduction to the course"
                       {...field}
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
-              </Button>
-            </div>
+            <Button disabled={!isValid || isSubmitting} type="submit">
+              Create
+            </Button>
           </form>
         </Form>
+      )}
+      {!isCreating && (
+        <div
+          className={cn(
+            "text-sm mt-2",
+            !initialData.chapters.length && "text-slate-500 italic"
+          )}
+        >
+          {!initialData.chapters.length && "No Chapters"}
+          {/*Todo: adda list of chapters */}
+        </div>
+      )}
+      {!isCreating && (
+        <p className="text-xs text-muted-foreground mt-4">
+          Drag & reorder the chapters
+        </p>
       )}
     </div>
   );
