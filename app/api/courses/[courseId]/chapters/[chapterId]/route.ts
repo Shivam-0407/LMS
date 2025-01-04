@@ -8,31 +8,33 @@ export async function PATCH(
 ) {
   try {
     const { userId } = await auth();
-    const {isPublished,...values} = await req.json()
+    const { isPublished, ...values } = await req.json();
+    console.log("values in chapters edit", values);
+    const demo = { ...values };
+    console.log(demo);
     if (!userId) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
     const courseOwner = await db.course.findUnique({
-      where:{
-        id:params.courseId,
-        userId
-      }
-    })
-    if(!courseOwner){
+      where: {
+        id: params.courseId,
+        userId,
+      },
+    });
+    if (!courseOwner) {
       return new NextResponse("Unauthorized access ", { status: 401 });
-
     }
     const chapter = await db.chapter.update({
-      where:{
-        id:params.chapterId,
-        courseId:params.courseId
+      where: {
+        id: params.chapterId,
+        courseId: params.courseId,
       },
-      data:{
-        ...values
-      }
-    })
+      data: {
+        ...values,
+      },
+    });
     // todo: handle Video URL update
-    return NextResponse.json(chapter)
+    return NextResponse.json(chapter);
   } catch (error) {
     console.log("COURSES_CHAPTER_ID", error);
     return new NextResponse("Internal Server Error ", { status: 500 });
