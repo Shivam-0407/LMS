@@ -38,11 +38,11 @@ export const ChaptersList = ({
     if (!result.destination) return;
 
     const items = Array.from(chapters);
-    const [reorderedItem] = items.splice(result.source.index, 1);
+    const [reorderedItem] = items.splice(result.source.index, 1); // 2nd parameter tells the number of elements to tremove,[reorderedItem] => is array-destructuring
     items.splice(result.destination.index, 0, reorderedItem);
 
     const startIndex = Math.min(result.source.index, result.destination.index);
-    const endIndex = Math.min(result.source.index, result.destination.index);
+    const endIndex = Math.max(result.source.index, result.destination.index);
 
     const updatedChapters = items.slice(startIndex, endIndex + 1);
 
