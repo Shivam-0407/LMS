@@ -114,4 +114,3 @@ export const ChaptersList = ({
   );
 };
 
-// ref={provided.innerRef}} {...provided.droppableProps}

@@ -139,4 +139,3 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   );
 };
 
-// 7:01
