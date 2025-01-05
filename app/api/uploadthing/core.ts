@@ -13,7 +13,7 @@ const handleAuth=async ()=>{
 export const ourFileRouter = {
  courseImage:f({image:{maxFileSize:"4MB",maxFileCount:1}}).middleware(()=>handleAuth()).onUploadComplete(()=>{}),
  courseAttachement:f(['text','image','video','audio','video']).middleware(()=>handleAuth()).onUploadComplete(()=>{}),
- chapterVideo:f({video:{maxFileCount:1,maxFileSize:"512B"}}).middleware(()=>handleAuth()).onUploadComplete(()=>{})
+ chapterVideo:f({video:{maxFileCount:1,maxFileSize:"16MB"}}).middleware(()=>handleAuth()).onUploadComplete(()=>{})
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;
