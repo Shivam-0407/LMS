@@ -36,7 +36,7 @@ export const ChapterTitleForm = ({ initialData, courseId,chapterId }: ChapterTit
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData?.title || "", // Use initialData to populate default values
+      title: initialData?.title || "", 
     },
   });
   const { isSubmitting, isValid } = form.formState;
