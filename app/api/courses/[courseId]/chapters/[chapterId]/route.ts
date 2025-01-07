@@ -15,11 +15,11 @@ export async function DELETE(
 ) {
   try {
     const { userId } = await auth();
-    const { isPublished, ...values } = await req.json();
 
     if (!userId) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
+    console.log("userID  me koi dikkat nahee hai");
     const courseOwner = await db.course.findUnique({
       where: {
         id: params.courseId,
@@ -29,6 +29,8 @@ export async function DELETE(
     if (!courseOwner) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
+    console.log("courseOwner  me koi dikkat nahee hai");
+
     const chapter = await db.chapter.findUnique({
       where: {
         id: params.chapterId,
@@ -38,6 +40,8 @@ export async function DELETE(
     if (!chapter) {
       return new NextResponse("Chapter not found", { status: 404 });
     }
+    console.log("chaoter  me koi dikkat nahee hai");
+
     // todo: handle Video URL delete
     if (chapter.videoUrl) {
       const existingMuxData = await db.muxData.findFirst({
@@ -60,12 +64,16 @@ export async function DELETE(
         id: params.chapterId,
       },
     });
+    console.log("deletedChapter me koi dikkat nahee hai ", deletedChapter);
+
     const publishedChapterInCourse = await db.chapter.findMany({
       where: {
         courseId: params.courseId,
         isPublished: true,
       },
     });
+    console.log("published chapter  me koi dikkat nahee hai");
+
     if (!publishedChapterInCourse.length) {
       await db.course.update({
         where: {
@@ -76,7 +84,7 @@ export async function DELETE(
         },
       });
     }
-    return NextResponse.json({message:"deleted successfully",deletedChapter});
+    return NextResponse.json(deletedChapter);
     //return "ok ok";
   } catch (error) {
     console.log("CHAPTER_ID_DELETE", error);
@@ -90,7 +98,8 @@ export async function PATCH(
 ) {
   try {
     const { userId } = await auth();
-
+    const { isPublished, ...values } = await req.json();
+    console.log("Patch me request bheji ", values);
     if (!userId) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
@@ -103,24 +112,26 @@ export async function PATCH(
     if (!courseOwner) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
-    const chapter = await db.chapter.findUnique({
+    const chapter = await db.chapter.update({
       where: {
         id: params.chapterId,
         courseId: params.courseId,
       },
+      data: {
+        ...values,
+      },
     });
-    if (!chapter) {
-      return new NextResponse("Chapter not found ", { status: 404 });
-    }
+
     // todo: handle Video URL update
-    if (chapter.videoUrl) {
+    if (values.videoUrl) {
+      console.log("mai values k videoUrl tak to aa gaya ", values);
       const existingMuxData = await db.muxData.findFirst({
         where: {
           chapterId: params.chapterId,
         },
       });
+      console.log("Mux data is present in the db", existingMuxData);
       if (existingMuxData) {
-        console.log("Mux data is present in the db");
         try {
           const isvideoPresentInMUX = await video.assets.retrieve(
             existingMuxData.assetId
@@ -139,22 +150,22 @@ export async function PATCH(
               id: existingMuxData.id,
             },
           });
-          const asset = await video.assets.create({
-            // now uploading a new video
-            input: values.videoUrl,
-            playback_policy: ["public"],
-            test: false,
-          });
-          await db.muxData.create({
-            // now creating a new muxData for the new video
-            data: {
-              chapterId: params.chapterId,
-              assetId: asset.id,
-              playbackId: asset.playback_ids?.[0]?.id,
-            },
-          });
         }
       }
+      const asset = await video.assets.create({
+        // now uploading a new video
+        input: values.videoUrl,
+        playback_policy: ["public"],
+        test: false,
+      });
+      await db.muxData.create({
+        // now creating a new muxData for the new video
+        data: {
+          chapterId: params.chapterId,
+          assetId: asset.id,
+          playbackId: asset.playback_ids?.[0]?.id,
+        },
+      });
     }
     return NextResponse.json(chapter);
   } catch (error) {
