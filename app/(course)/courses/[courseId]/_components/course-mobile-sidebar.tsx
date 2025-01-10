@@ -6,7 +6,7 @@ import { CourseSideBar } from "./course-sidebar";
 interface CourseMobileSidebarProps {
   course: Course & {
     chapters: (Chapter & {
-      userProgress: UserProgress[] | null;
+       gress: UserProgress[] | null;
     })[];
   };
   progressCount: number;
