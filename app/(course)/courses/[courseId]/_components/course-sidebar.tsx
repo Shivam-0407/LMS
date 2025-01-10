@@ -34,9 +34,19 @@ export const CourseSideBar = async ({
       <div className="p-8 flex flex-col border-b">
         <h1 className="font-semibold">{course.title}</h1>
         {/*Check purchase and add progress */}
-
       </div>
-      <div className="flex flex-col w-full ">{course.chapters.map((chapter)=>(<CourseSideBarItem key={chapter.id} id={chapter.id} label={chapter.title} isCompleted={!!chapter.userProgress?.[0]?.isCompleted} courseId={course.id} isLocked={!chapter.isFree && !purchase}/>))}</div>
+      <div className="flex flex-col w-full ">
+        {course.chapters.map((chapter) => (
+          <CourseSideBarItem
+            key={chapter.id}
+            id={chapter.id}
+            label={chapter.title}
+            isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
+            courseId={course.id}
+            isLocked={!chapter.isFree && !purchase}
+          />
+        ))}
+      </div>
     </div>
   );
 };
