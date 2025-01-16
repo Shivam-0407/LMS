@@ -1,14 +1,11 @@
 "use client";
 import { z } from "zod";
 import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
 import { ImageIcon, Pencil, PlusCircleIcon } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
 import { Course } from "@prisma/client";
 import Image from "next/image";
 import { FileUpload } from "@/app/(dashboard)/_components/file-upload";
@@ -31,10 +28,15 @@ export const ImageForm = ({ initialData, courseId }: ImageFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(`/api/courses/${courseId}`, values);
-      toast.success("Course Updated Successfully");
-      toggleEdit();
-      router.refresh();
+      const validatedValues = formSchema.safeParse(values);
+      if (validatedValues.error) {
+        toast.error("Error in validating the form");
+      } else {
+        await axios.patch(`/api/courses/${courseId}`, values);
+        toast.success("Course Updated Successfully");
+        toggleEdit();
+        router.refresh();
+      }
     } catch {
       toast.error("Something went wrong!");
     }

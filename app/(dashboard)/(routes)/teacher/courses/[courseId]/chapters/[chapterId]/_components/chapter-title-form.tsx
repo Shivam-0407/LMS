@@ -7,7 +7,6 @@ import {
   Form,
   FormField,
   FormItem,
-  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -36,7 +35,7 @@ export const ChapterTitleForm = ({ initialData, courseId,chapterId }: ChapterTit
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: initialData?.title || "", 
+      title: initialData?.title || "",
     },
   });
   const { isSubmitting, isValid } = form.formState;

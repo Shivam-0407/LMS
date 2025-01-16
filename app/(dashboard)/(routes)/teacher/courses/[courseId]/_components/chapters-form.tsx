@@ -5,14 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FormControl, Form, FormField, FormItem } from "@/components/ui/form";
 import { Button } from "@/components/ui/button";
 import { useForm } from "react-hook-form";
-import { Loader2, Pencil, PlusCircle } from "lucide-react";
+import { Loader2, PlusCircle } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
 import { Chapter, Course } from "@prisma/client";
-import { title } from "process";
 import { ChaptersList } from "./chapters-list";
 
 interface ChaptersFormProps {
@@ -56,10 +55,10 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       });
       toast.success("Chapters are reordered");
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong !! ");
-    }finally{
-      setIsUpdating(false)
+    } finally {
+      setIsUpdating(false);
     }
   };
 
@@ -138,4 +137,3 @@ export const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
     </div>
   );
 };
-

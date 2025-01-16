@@ -2,7 +2,6 @@ import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import Mux from "@mux/mux-node";
-import { Video } from "lucide-react";
 
 const { video } = new Mux({
   tokenId: process.env.MUX_TOKEN_ID!,
@@ -98,7 +97,7 @@ export async function PATCH(
 ) {
   try {
     const { userId } = await auth();
-    const { isPublished, ...values } = await req.json();
+    const { ...values } = await req.json();
     console.log("Patch me request bheji ", values);
     if (!userId) {
       return new NextResponse("Unauthorized access ", { status: 401 });

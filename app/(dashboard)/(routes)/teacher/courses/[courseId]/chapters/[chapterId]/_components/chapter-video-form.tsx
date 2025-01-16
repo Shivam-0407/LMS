@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { Chapter, MuxData } from "@prisma/client";
 import { FileUpload } from "@/app/(dashboard)/_components/file-upload";
-import MuxPlayer from "@mux/mux-player-react"
+import MuxPlayer from "@mux/mux-player-react";
 
 interface ChapterVideoFormProps {
   initialData: Chapter & { muxData?: MuxData | null };
@@ -31,13 +31,18 @@ export const ChapterVideoForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId}`,
-        values
-      );
-      toast.success("Chapter Updated Successfully");
-      toggleEdit();
-      router.refresh();
+      const validatedValues = formSchema.safeParse(values);
+      if (validatedValues.error) {
+        toast.error("Error in validating the form");
+      } else {
+        await axios.patch(
+          `/api/courses/${courseId}/chapters/${chapterId}`,
+          values
+        );
+        toast.success("Chapter Updated Successfully");
+        toggleEdit();
+        router.refresh();
+      }
     } catch {
       toast.error("Something went wrong!");
     }
@@ -69,7 +74,9 @@ export const ChapterVideoForm = ({
             <Video className="h-10 w-10 text-slate-500" />
           </div>
         ) : (
-          <div className="relative aspect-video mt-2"><MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} /></div>
+          <div className="relative aspect-video mt-2">
+            <MuxPlayer playbackId={initialData?.muxData?.playbackId || ""} />
+          </div>
         ))}
 
       {isEditing && (
@@ -83,7 +90,7 @@ export const ChapterVideoForm = ({
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Upload this Chapter's Video
+            Upload this Chapter&#39;s Video{" "}
           </div>
         </div>
       )}

@@ -1,15 +1,8 @@
 "use client";
 import { z } from "zod";
 import axios from "axios";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
-import {
-  File,
-  Loader2,
-  PlusCircleIcon,
-  X,
-} from "lucide-react";
+import { File, Loader2, PlusCircleIcon, X } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -36,10 +29,15 @@ export const AttachemntForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.post(`/api/courses/${courseId}/attachements`, values);
-      toast.success("Course Updated Successfully");
-      toggleEdit();
-      router.refresh();
+      const validatedValues = formSchema.safeParse(values);
+      if (validatedValues.error) {
+        toast.error("Error in validating the form");
+      } else {
+        await axios.post(`/api/courses/${courseId}/attachements`, values);
+        toast.success("Course Updated Successfully");
+        toggleEdit();
+        router.refresh();
+      }
     } catch {
       toast.error("Something went wrong!");
     }
@@ -133,5 +131,3 @@ export const AttachemntForm = ({
     </div>
   );
 };
-
-//15:00

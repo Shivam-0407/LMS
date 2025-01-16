@@ -4,7 +4,7 @@ import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
 import { useConfettiStore } from "@/hooks/use-confetti";
 import axios from "axios";
-import { Router, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -28,10 +28,10 @@ export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
         toast.success("Course published");
-        confetti.onOpen()
+        confetti.onOpen();
       }
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setisLoading(false);
@@ -45,7 +45,7 @@ export const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
       toast.success("Course Deleted");
       router.refresh();
       router.push(`/teacher/courses`);
-    } catch (error) {
+    } catch {
       toast.error("Someting went wrong");
     } finally {
       setisLoading(false);

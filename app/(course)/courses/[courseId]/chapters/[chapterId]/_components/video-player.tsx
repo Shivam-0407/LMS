@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import MuxPlayer from "@mux/mux-player-react";
 import axios from "axios";
 import { Loader2, Lock } from "lucide-react";
-import next from "next";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -14,7 +13,7 @@ interface VideoPlayerProps {
   chapterId: string;
   courseId: string;
   title: string;
-  nextChapterId: string;
+  nextChapterId: string | null;
   playbackId: string;
   isLocked: boolean;
   completeOnEnd: boolean;
@@ -42,14 +41,14 @@ export const VideoPlayer = ({
             isCompleted: true,
           }
         );
-        if(!nextChapterId){
-          confetti.onOpen()
+        if (!nextChapterId) {
+          confetti.onOpen();
         }
-        toast.success("Progress Updated")
-        router.refresh()
+        toast.success("Progress Updated");
+        router.refresh();
 
-        if(nextChapterId){
-          router.push(`/courses/${courseId}/chapters/${nextChapterId}`)
+        if (nextChapterId) {
+          router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
         }
       }
     } catch {

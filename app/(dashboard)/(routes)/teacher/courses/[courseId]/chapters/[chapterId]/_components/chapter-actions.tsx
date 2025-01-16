@@ -3,7 +3,7 @@
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
-import { Router, Trash } from "lucide-react";
+import { Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -39,7 +39,7 @@ export const ChapterActions = ({
         toast.success("Chapter published");
       }
       router.refresh();
-    } catch (error) {
+    } catch {
       toast.error("Something went wrong");
     } finally {
       setisLoading(false);
@@ -50,10 +50,10 @@ export const ChapterActions = ({
     try {
       setisLoading(true);
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
-      toast.success("Chapter deleted succesfully")
+      toast.success("Chapter deleted succesfully");
       router.refresh();
       router.push(`/teacher/courses/${courseId}`);
-    } catch (error) {
+    } catch {
       toast.error("Someting went wrong");
     } finally {
       setisLoading(false);
