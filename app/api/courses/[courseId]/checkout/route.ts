@@ -12,7 +12,6 @@ export async function POST(
     const user = await currentUser();
 
     if (!user || !user.id || !user.emailAddresses?.[0].emailAddress) {
-      console.log("mujhe user nahee milaa sorry ",user)
       return new NextResponse("Unauthorized ", { status: 401 });
     }
     const course = await db.course.findUnique({
@@ -29,7 +28,6 @@ export async function POST(
         },
       },
     });
-    console.log("purchase ",purchase," course ",course)
     if (purchase) {
       return new NextResponse("Already Purchase ", { status: 400 });
     }
@@ -59,7 +57,6 @@ export async function POST(
     });
 
     if (!stripeCustomer) {
-      console.log("stripe customer nahee hai ")
       const customer = await stripe.customers.create({
         email: user.emailAddresses[0].emailAddress,
       });
@@ -71,7 +68,6 @@ export async function POST(
         },
       });
     }
-    console.log("yhaa phata hai code coz of stripeCustomer", stripeCustomer)
     const session = await stripe.checkout.sessions.create({
       customer: stripeCustomer.stripeCustomerId,
       line_items,

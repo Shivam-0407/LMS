@@ -18,7 +18,6 @@ export async function DELETE(
     if (!userId) {
       return new NextResponse("Unatuhorized ", { status: 401 });
     }
-    console.log("course id is ... ", courseId);
     const course = await db.course.findUnique({
       where: {
         id: courseId,
@@ -65,7 +64,6 @@ export async function PATCH(
     if (!userId) {
       return new NextResponse("Unatuhorized ", { status: 401 });
     }
-    console.log("course id is ... ", courseId);
     const course = await db.course.update({
       where: {
         id: courseId,

@@ -58,7 +58,6 @@ export const ChapterAccessForm = ({
       toast.error("Something went wrong !! ");
     }
   };
-  console.log("initialData ", initialData);
   return (
     <div className="mt-6 border bg-slate-100  rounded-md p-4">
       <div className="flex font-medium items-center justify-between">

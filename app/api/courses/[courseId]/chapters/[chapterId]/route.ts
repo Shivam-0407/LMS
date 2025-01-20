@@ -18,7 +18,6 @@ export async function DELETE(
     if (!userId) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
-    console.log("userID  me koi dikkat nahee hai");
     const courseOwner = await db.course.findUnique({
       where: {
         id: params.courseId,
@@ -28,7 +27,6 @@ export async function DELETE(
     if (!courseOwner) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
-    console.log("courseOwner  me koi dikkat nahee hai");
 
     const chapter = await db.chapter.findUnique({
       where: {
@@ -39,7 +37,6 @@ export async function DELETE(
     if (!chapter) {
       return new NextResponse("Chapter not found", { status: 404 });
     }
-    console.log("chaoter  me koi dikkat nahee hai");
 
     // todo: handle Video URL delete
     if (chapter.videoUrl) {
@@ -49,7 +46,6 @@ export async function DELETE(
         },
       });
       if (existingMuxData) {
-        console.log("yhaa mere pass mux data hai");
         await video.assets.delete(existingMuxData.assetId);
         await db.muxData.delete({
           where: {
@@ -63,7 +59,6 @@ export async function DELETE(
         id: params.chapterId,
       },
     });
-    console.log("deletedChapter me koi dikkat nahee hai ", deletedChapter);
 
     const publishedChapterInCourse = await db.chapter.findMany({
       where: {
@@ -71,7 +66,6 @@ export async function DELETE(
         isPublished: true,
       },
     });
-    console.log("published chapter  me koi dikkat nahee hai");
 
     if (!publishedChapterInCourse.length) {
       await db.course.update({
@@ -98,7 +92,6 @@ export async function PATCH(
   try {
     const { userId } = await auth();
     const { ...values } = await req.json();
-    console.log("Patch me request bheji ", values);
     if (!userId) {
       return new NextResponse("Unauthorized access ", { status: 401 });
     }
@@ -123,21 +116,17 @@ export async function PATCH(
 
     // todo: handle Video URL update
     if (values.videoUrl) {
-      console.log("mai values k videoUrl tak to aa gaya ", values);
       const existingMuxData = await db.muxData.findFirst({
         where: {
           chapterId: params.chapterId,
         },
       });
-      console.log("Mux data is present in the db", existingMuxData);
       if (existingMuxData) {
         try {
           const isvideoPresentInMUX = await video.assets.retrieve(
             existingMuxData.assetId
           );
           if (isvideoPresentInMUX) {
-            console.log(isvideoPresentInMUX);
-            console.log("yup it's there");
             await video.assets.delete(existingMuxData.assetId);
           }
         } catch (error) {

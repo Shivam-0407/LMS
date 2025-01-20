@@ -19,11 +19,9 @@ export async function POST(
         userId: userId,
       },
     });
-    console.log('ho ho ho')
     if (!courseOwner) {
       return new NextResponse("Unauthorized Error", { status: 401 });
     }
-    console.log('url is ',url.url)
     const attachement = await db.attachement.create({
       data:{
         url,

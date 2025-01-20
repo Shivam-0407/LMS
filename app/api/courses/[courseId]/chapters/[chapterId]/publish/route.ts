@@ -37,7 +37,6 @@ export async function PATCH(
       !chapter?.description ||
       !chapter?.videoUrl
     ) {
-      console.log("mux yahh pahata hai ",muxData);
       return new NextResponse("Missing required fields ", { status: 400 });
     }
     const publishedChpater = await db.chapter.update({

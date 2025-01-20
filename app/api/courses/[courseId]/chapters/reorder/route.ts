@@ -12,7 +12,6 @@ export async function PUT(
       return new NextResponse("Unauthorized access", { status: 401 });
     }
     const data = await req.json();
-    console.log("list dekho ", data);
     const courseOwner = await db.course.findUnique({
       where: {
         id: params.courseId,
